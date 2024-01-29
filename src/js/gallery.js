@@ -1,3 +1,9 @@
+// Описаний в документації
+import SimpleLightbox from "simplelightbox";
+// Додатковий імпорт стилів
+import "simplelightbox/dist/simple-lightbox.min.css";
+
+
 const images = [
   {
     preview:
@@ -66,21 +72,7 @@ const images = [
 
 const galleryContainer = document.querySelector('.gallery');
 
-galleryContainer.addEventListener('click', onGalleryContainerClick);
-
 renderGallery(images);
-
-const instance = basicLightbox.create(
-  `<img class="modal-img" src="" alt="modal image" />`,
-  {
-    onShow: (instance) => {
-      document.addEventListener('keydown', onEscPress);
-    },
-    onClose: (instance) => {
-      document.removeEventListener('keydown', onEscPress);
-    },
-  }
-);
 
 function renderGallery(images) {
   const markup = images
@@ -91,7 +83,6 @@ function renderGallery(images) {
             <img
               class="gallery-image"
               src="${preview}"
-              data-source="${original}"
               alt="${description}"
             />
           </a>
@@ -102,22 +93,3 @@ function renderGallery(images) {
   galleryContainer.innerHTML = `<ul class="gallery-list">${markup}</ul>`;
 }
 
-function onGalleryContainerClick(event) {
-  event.preventDefault();
-  const target = event.target;
-
-  if (target.nodeName !== 'IMG') {
-    return;
-  }
-
-  const modalImg = instance.element().querySelector('.modal-img');
-  modalImg.setAttribute('src', target.dataset.source);
-  modalImg.setAttribute('alt', target.alt);
-  instance.show();
-}
-
-function onEscPress(event) {
-  if (event.code === 'Escape') {
-    instance.close();
-  }
-}
