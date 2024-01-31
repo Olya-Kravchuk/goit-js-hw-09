@@ -4,11 +4,6 @@ import { images } from "./img";
 
 const galleryContainer = document.querySelector('.gallery');
 
-const lightbox = new SimpleLightbox('.gallery-link', {
-  overlayOpacity: 0.9,
-  captionsData: "alt",
-  captionDelay: 500
-});
 renderGallery(images);
 
 function renderGallery(images) {
@@ -30,3 +25,9 @@ function renderGallery(images) {
   galleryContainer.innerHTML = `<ul class="gallery-list">${markup}</ul>`;
 }
 
+
+const lightbox = new SimpleLightbox('.gallery-link', {
+  overlayOpacity: 0.9,
+  captionsData: "alt",
+  captionDelay: 250
+});
