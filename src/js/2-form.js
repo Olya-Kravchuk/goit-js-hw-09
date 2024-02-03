@@ -4,15 +4,16 @@ const STORAGE_KEY = "feedback-form-state";
 form.addEventListener('input', onFormInput);
 
 function onFormInput(event) {
-  const email = event.currentTarget.elements.email.value.trim();
-  const message = event.currentTarget.elements.message.value.trim();
+  const { name, value } = event.target;
 
-  const data = {
-    email: email,
-    message: message,
+  if (name === 'email' || name === 'message') {
+    const data = {
+      ...loadFromLS(STORAGE_KEY),
+      [name]: value.trim(),
+    };
+
+    saveToLS(STORAGE_KEY, data);
   }
-
-  saveToLS(STORAGE_KEY, data)
 }
 
 form.addEventListener('submit', onFormSubmit);
@@ -20,8 +21,8 @@ form.addEventListener('submit', onFormSubmit);
 function onFormSubmit(event) {
   event.preventDefault();
 
-  const email = event.target.elements.email.value.trim();
-  const message = event.target.elements.message.value.trim();
+  const email = form.elements.email.value.trim();
+  const message = form.elements.message.value.trim();
 
   if (!email || !message) {
     alert('All form fields must be filled in');
@@ -38,18 +39,17 @@ function saveToLS(key, value) {
 }
 
 function loadFromLS(key) {
-  const data = localStorage.getItem(key);
-
   try {
-    const result = JSON.parse(data);
-    return result;
-  } catch {
-    return data;
+    const data = localStorage.getItem(key);
+    return JSON.parse(data) || {};
+  } catch (error) {
+    console.error('Error loading data from localStorage:', error.message);
+    return {};
   }
 }
 
 function restoreData() {
-  const data = loadFromLS(STORAGE_KEY) || {};
+  const data = loadFromLS(STORAGE_KEY);
 
   form.elements.email.value = data.email || '';
   form.elements.message.value = data.message || '';
